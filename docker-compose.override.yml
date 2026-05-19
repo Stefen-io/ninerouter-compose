@@ -1,0 +1,15 @@
+---
+# docker-compose.override.yml
+#
+# Merge behavior (important):
+# - Maps (e.g., environment, labels) are merged; values here override base.
+# - Lists (e.g., ports, volumes, command, entrypoint) REPLACE the base list.
+#   → If you want to “add” to a list, repeat base items and append your own.
+
+services:
+  ninerouter:
+    build:
+      context: .
+      args:
+        - NINEROUTER_VERSION=${NINEROUTER_VERSION:-latest}
+      dockerfile: ./Dockerfile

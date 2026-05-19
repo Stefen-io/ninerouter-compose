@@ -1,0 +1,52 @@
+---
+# docker-compose.yml
+#
+# services:
+#   <your-service>:
+#     # Example base service definition — keep STRUCTURE only here.
+#     # env_file, secrets, or prod/staging overrides
+#     # belong in environment files.
+#     # env_file:
+#     #   - ./.env
+#     # environment:
+#     #   SOME_KEY: default_value
+#     # ports:
+#     #   - "8080:8080"
+#     # volumes:
+#     #   - data_volume:/app/data
+#
+# networks:
+#   # Define/override networks only if they differ from defaults.
+#   # default:
+#   #   name: ${STACK_NAME:-myapp}-net
+#
+# volumes:
+#   # Declare shared volumes here. Environment-specific volumes go in overrides.
+#   # data_volume:
+#   #   driver: local
+
+services:
+  ninerouter:
+    image: ninerouter:${NINEROUTER_VERSION:-latest}
+    restart: unless-stopped
+    environment:
+      PORT: 20128
+      HOSTNAME: 0.0.0.0
+      JWT_SECRET: ${NINEROUTER_JWT_SECRET}
+      INITIAL_PASSWORD: ${NINEROUTER_INITIAL_PASSWORD}
+      BASE_URL: ${NINEROUTER_BASE_URL:-http://localhost:20128}
+      CLOUD_URL: ${NINEROUTER_CLOUD_URL:-http://localhost:3000}
+      NEXT_PUBLIC_BASE_URL: ${NINEROUTER_NEXT_PUBLIC_BASE_URL:-https://9router.com}
+      NEXT_PUBLIC_CLOUD_URL: ${NINEROUTER_NEXT_PUBLIC_CLOUD_URL:-https://9router.com}
+      API_KEY_SECRET: ${NINEROUTER_API_KEY_SECRET}
+      MACHINE_ID_SALT: ${NINEROUTER_MACHINE_ID_SALT}
+      ENABLE_REQUEST_LOGS: ${NINEROUTER_ENABLE_REQUEST_LOGS:-true}
+      AUTH_COOKIE_SECURE: ${NINEROUTER_AUTH_COOKIE_SECURE:-false}
+      REQUIRE_API_KEY: ${NINEROUTER_REQUIRE_API_KEY:-true}
+    ports:
+      - 20128:20128
+    volumes:
+      - ninerouter_data:/var/lib/9router
+
+volumes:
+  ninerouter_data:
